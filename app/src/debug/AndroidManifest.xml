@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:icon="@mipmap/ic_launcher_orange"
+        android:roundIcon="@mipmap/ic_launcher_orange"
+        tools:replace="android:icon,android:roundIcon">
+
+        <!-- Debug: disable the default green launcher alias -->
+        <activity-alias
+            android:name=".activities.SplashActivity.Green"
+            android:enabled="false"
+            tools:replace="android:enabled" />
+
+        <!-- Debug: enable the orange launcher alias -->
+        <activity-alias
+            android:name=".activities.SplashActivity.Orange"
+            android:enabled="true"
+            tools:replace="android:enabled" />
+
+    </application>
+
+</manifest>

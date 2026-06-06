@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/cloud_actions_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cloud_actions"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:gravity="center"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/dividerHorizontal"/>
+
+    <TextView
+        android:id="@+id/edit_cloud_title"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/edit_cloud_title"
+        android:drawableStart="@drawable/ic_edit_vector"
+        android:drawablePadding="16dp"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:textSize="16sp"
+        tools:ignore="RtlSymmetry"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/dividerHorizontal"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
+
+    <TextView
+        android:id="@+id/cloud_favorite_action"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/cloud_favorite"
+        android:drawableStart="@drawable/ic_star_vector"
+        android:drawablePadding="16dp"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:textSize="16sp"
+        tools:ignore="RtlSymmetry"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/dividerHorizontal"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
+
+    <TextView
+        android:id="@+id/delete_cloud_photo"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/delete_cloud_photo"
+        android:drawableStart="@drawable/ic_delete_vector"
+        android:drawablePadding="16dp"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:textSize="16sp"
+        tools:ignore="RtlSymmetry"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp"/>
+
+</LinearLayout>
