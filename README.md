@@ -1,39 +1,63 @@
-# Fossify Gallery
+# Cloud Gallery
 
-<img alt="Logo" src="graphics/icon.webp" width="120" />
+<img alt="Cloud Gallery logo" src="graphics/icon.webp" width="120" />
 
-<a href='https://play.google.com/store/apps/details?id=org.fossify.gallery'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height=80/></a> <a href="https://f-droid.org/en/packages/org.fossify.gallery/"><img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-en.svg" alt="Get it on F-Droid" height=80/></a> <a href="https://apt.izzysoft.de/fdroid/index/apk/org.fossify.gallery"><img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height=80/></a>
+Cloud Gallery is an open-source Android photo and video gallery with integrated cloud storage support. It combines a fast local gallery experience with optional backup and metadata management through Cloud Gallery services and Alibaba Cloud OSS.
 
-Unleash memories, not personal data. Fossify Gallery is the ultimate photo and video app that's as powerful as it is private. No ads, no unnecessary permissions – just a seamless experience tailored for you.
+## Cloud Storage
 
-**🖼️ PHOTO EDITING AT YOUR FINGERTIPS:**  
-Enhance your photos with our basic yet powerful photo editor. Crop, resize, rotate, flip, draw, and apply stunning filters, all without compromising your privacy. Take control of your memories like never before.
+- Upload photos and videos directly from the gallery to Alibaba Cloud OSS.
+- Skip duplicate transfers with MD5-based file detection and instant upload.
+- Track upload progress, cancel active uploads, and clear completed tasks.
+- See cloud upload status alongside local photos and filter for files that have not been uploaded.
+- Manage cloud titles, favorites, and stored photo properties.
+- Delete a photo's cloud record without deleting the local file.
+- Import account configuration by pasting a configuration string or scanning a QR code.
+- Scan a QR code from the Android app to authorize a Cloud Gallery Web login.
 
-**🌐 PRIVACY FIRST, ALWAYS:**  
-Your privacy matters. Ditch the data-hungry giants. Fossify Gallery puts you in control. Strip away EXIF metadata like GPS coordinates and camera details, keeping your memories yours, and yours alone.
+Cloud features require an account configured through the Cloud Gallery service. The Android app remains usable as a local gallery without signing in.
 
-**🔒 SUPERIOR SECURITY:**  
-Lock down your memories with pin, pattern, or fingerprint protection. Secure specific photos, videos, or the entire app – you decide who gets access. Peace of mind, guaranteed.
+## Local Gallery
 
-**🔄 RECOVER WITH EASE:**  
-Breathe easy, accidents happen! Fossify Gallery's built-in recycle bin lets you recover deleted photos and videos in seconds. No more lost treasures, just pure relief.
+- Browse photos and videos by folders or media groups.
+- View, crop, resize, rotate, flip, draw on, and filter images.
+- Play videos with gesture and playback-speed controls.
+- Mark favorites, search media, manage hidden or excluded folders, and restore files from the recycle bin.
+- Customize themes, colors, layouts, sorting, and visible actions.
+- View common image, video, RAW, SVG, GIF, AVIF, and JPEG XL formats.
 
-**🎨 YOUR GALLERY, YOUR STYLE:**  
-Customize the look, feel, and functionality to match your style. From UI themes to function buttons, Fossify Gallery gives you the creative freedom you crave.
+## Build
 
-**📷 UNIVERSAL FORMAT FREEDOM:**  
-JPEG, JPEG XL, PNG, MP4, MKV, RAW, SVG, GIF, AVIF, videos, and more – we've got your memories covered, in any format you choose. No restrictions, just limitless possibilities.
+Requirements:
 
-**✨ MATERIAL DESIGN WITH DYNAMIC THEMES:**  
-Experience the beauty of intuitive material design with dynamic themes. Want more? Dive into custom themes and make your gallery truly unique.
+- Android SDK
+- JDK 17
 
-➡️ Explore more Fossify apps: https://www.fossify.org<br>
-➡️ Open-Source Code: https://www.github.com/FossifyOrg<br>
-➡️ Join the community on Reddit: https://www.reddit.com/r/Fossify<br>
-➡️ Connect on Telegram: https://t.me/Fossify
+Build a debug APK:
+
+```bash
+./gradlew assembleFossDebug
+```
+
+Run static checks:
+
+```bash
+./gradlew detekt
+./gradlew lintDebug
+```
+
+## Source Of Truth
+
+This repository is a read-only public mirror of the Android client. Development happens in the private Cloud Gallery repository, and accepted changes are synchronized here automatically.
+
+## License
+
+Cloud Gallery is distributed under the terms of the [LICENSE](LICENSE) file.
+
+## Screenshots
 
 <div align="center">
-<img alt="App image" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" width="30%">
-<img alt="App image" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" width="30%">
-<img alt="App image" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" width="30%">
+<img alt="Cloud Gallery screenshot" src="fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" width="30%">
+<img alt="Cloud Gallery screenshot" src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" width="30%">
+<img alt="Cloud Gallery screenshot" src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" width="30%">
 </div>
