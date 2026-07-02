@@ -33,6 +33,21 @@
         tools:visibility="visible" />
 
     <ImageView
+        android:id="@+id/motion_photo_icon"
+        android:layout_width="@dimen/favorite_list_icon_size"
+        android:layout_height="@dimen/favorite_list_icon_size"
+        android:layout_alignStart="@id/medium_thumbnail"
+        android:layout_alignBottom="@id/medium_thumbnail"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:background="@drawable/circle_black_background"
+        android:contentDescription="@null"
+        android:padding="@dimen/tiny_margin"
+        android:src="@drawable/ic_motion_photo"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <ImageView
         android:id="@+id/medium_check"
         android:layout_width="@dimen/selection_check_size"
         android:layout_height="@dimen/selection_check_size"

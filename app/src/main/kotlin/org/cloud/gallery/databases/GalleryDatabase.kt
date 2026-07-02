@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import org.fossify.gallery.interfaces.*
 import org.fossify.gallery.models.*
 
-@Database(entities = [Directory::class, Medium::class, Widget::class, DateTaken::class, Favorite::class], version = 11)
+@Database(entities = [Directory::class, Medium::class, Widget::class, DateTaken::class, Favorite::class], version = 12)
 abstract class GalleryDatabase : RoomDatabase() {
 
     abstract fun DirectoryDao(): DirectoryDao
@@ -38,6 +38,7 @@ abstract class GalleryDatabase : RoomDatabase() {
                             .addMigrations(MIGRATION_8_9)
                             .addMigrations(MIGRATION_9_10)
                             .addMigrations(MIGRATION_10_11)
+                            .addMigrations(MIGRATION_11_12)
                             .build()
                     }
                 }
@@ -131,6 +132,12 @@ abstract class GalleryDatabase : RoomDatabase() {
                         SELECT MIN(id) FROM date_takens GROUP BY LOWER(full_path)
                     )
                 """)
+            }
+        }
+
+        private val MIGRATION_11_12 = object : Migration(11, 12) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE media ADD COLUMN is_motion_photo INTEGER NOT NULL DEFAULT 0")
             }
         }
     }

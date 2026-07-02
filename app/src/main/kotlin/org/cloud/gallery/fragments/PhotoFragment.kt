@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.util.Log
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
@@ -100,6 +101,13 @@ import java.io.FileOutputStream
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.ceil
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
+import org.fossify.gallery.helpers.MotionPhotoDetector
+import org.fossify.gallery.helpers.MotionPhotoExtractor
+import org.fossify.gallery.helpers.MotionPhotoInfo
+import org.fossify.gallery.extensions.mediaDB
 
 class PhotoFragment : ViewPagerFragment() {
     private val DEFAULT_DOUBLE_TAP_ZOOM = 2f
@@ -128,6 +136,9 @@ class PhotoFragment : ViewPagerFragment() {
     private var mCurrentGestureViewZoom = 1f
     private var mIsTouched = false
     private var mInitialZoom = 1f
+
+    private var motionPhotoInfo: MotionPhotoInfo? = null
+    private var motionExoPlayer: ExoPlayer? = null
 
     private var mStoredShowExtendedDetails = false
     private var mStoredHideExtendedDetails = false
@@ -160,6 +171,7 @@ class PhotoFragment : ViewPagerFragment() {
             instantPrevItem.setOnClickListener { listener?.goToPrevItem() }
             instantNextItem.setOnClickListener { listener?.goToNextItem() }
             panoramaOutline.setOnClickListener { openPanorama() }
+            motionPhotoPlayBtn.setOnClickListener { playMotionVideo() }
 
             instantPrevItem.parentView = container
             instantNextItem.parentView = container
@@ -343,6 +355,7 @@ class PhotoFragment : ViewPagerFragment() {
         }
 
         mLoadZoomableViewHandler.removeCallbacksAndMessages(null)
+        stopMotionVideo()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -415,6 +428,7 @@ class PhotoFragment : ViewPagerFragment() {
         } else {
             hideZoomableView()
             ColorModeHelper.resetColorMode(activity)
+            stopMotionVideo()
         }
     }
 
@@ -454,6 +468,11 @@ class PhotoFragment : ViewPagerFragment() {
                     else -> loadBitmap()
                 }
             }
+        }
+
+        // 旁路: 仅 JPEG 检测 Motion Photo
+        if (mMedium.name.endsWith(".jpg", true) || mMedium.name.endsWith(".jpeg", true)) {
+            checkMotionPhotoAsync()
         }
     }
 
@@ -852,6 +871,104 @@ class PhotoFragment : ViewPagerFragment() {
                 binding.panoramaOutline.alpha = 0f
             }
         }
+    }
+
+    private fun checkMotionPhotoAsync() {
+        ensureBackgroundThread {
+            // 如果已有缓存的 info 且字段标记为 motion photo, 直接显示按钮
+            if (motionPhotoInfo != null && mMedium.isMotionPhoto) {
+                activity?.runOnUiThread {
+                    binding.motionPhotoPlayBtn.beVisible()
+                }
+                return@ensureBackgroundThread
+            }
+
+            val info = MotionPhotoDetector.detect(mMedium.path)
+            if (info != null) {
+                motionPhotoInfo = info
+                activity?.runOnUiThread {
+                    binding.motionPhotoPlayBtn.beVisible()
+                }
+                if (!mMedium.isMotionPhoto) {
+                    // 回写数据库 (在后台线程, Room 不允许主线程写)
+                    activity?.mediaDB?.updateMotionPhotoFlag(mMedium.id ?: return@ensureBackgroundThread, true)
+                    mMedium.isMotionPhoto = true
+                }
+            } else if (mMedium.isMotionPhoto) {
+                // 之前被误标记为 motion photo (旧版检测 bug), 重置
+                mMedium.isMotionPhoto = false
+                activity?.mediaDB?.updateMotionPhotoFlag(mMedium.id ?: return@ensureBackgroundThread, false)
+                activity?.runOnUiThread {
+                    binding.motionPhotoPlayBtn.beGone()
+                }
+            }
+        }
+    }
+
+    private fun playMotionVideo() {
+        val ctx = context ?: run {
+            Log.w("MotionPhoto", "playMotionVideo: context is null")
+            return
+        }
+        val info = motionPhotoInfo
+        if (info == null) {
+            Log.w("MotionPhoto", "playMotionVideo: motionPhotoInfo is null")
+            activity?.toast("无法播放实况视频")
+            return
+        }
+
+        Log.d("MotionPhoto", "playMotionVideo: extracting video, offset=${info.videoOffset}, length=${info.videoLength}")
+
+        ensureBackgroundThread {
+            val videoFile = MotionPhotoExtractor.extract(mMedium.path, info, ctx.cacheDir)
+            Log.d("MotionPhoto", "playMotionVideo: extraction result=${videoFile?.absolutePath}")
+
+            val hostActivity = activity
+            if (hostActivity == null) {
+                Log.w("MotionPhoto", "playMotionVideo: activity is null after extraction")
+                return@ensureBackgroundThread
+            }
+
+            hostActivity.runOnUiThread {
+                if (videoFile == null || !videoFile.exists()) {
+                    hostActivity.toast("无法播放实况视频")
+                    return@runOnUiThread
+                }
+
+                val player = ExoPlayer.Builder(ctx)
+                    .setHandleAudioBecomingNoisy(true)
+                    .build()
+
+                motionExoPlayer = player
+
+                val mediaItem = MediaItem.fromUri(android.net.Uri.fromFile(videoFile))
+                player.setMediaItem(mediaItem)
+                player.repeatMode = Player.REPEAT_MODE_OFF
+                player.addListener(object : Player.Listener {
+                    override fun onPlaybackStateChanged(state: Int) {
+                        if (state == Player.STATE_ENDED) {
+                            stopMotionVideo()
+                        }
+                    }
+                })
+
+                binding.motionVideoPlayerView.player = player
+                binding.motionVideoContainer.beVisible()
+                binding.motionPhotoPlayBtn.beGone()
+                player.prepare()
+                player.play()
+            }
+        }
+    }
+
+    private fun stopMotionVideo() {
+        motionExoPlayer?.let { player ->
+            player.stop()
+            player.release()
+        }
+        motionExoPlayer = null
+        binding.motionVideoContainer.beGone()
+        binding.motionPhotoPlayBtn.beVisible()
     }
 
     private fun getImageOrientation(): Int {

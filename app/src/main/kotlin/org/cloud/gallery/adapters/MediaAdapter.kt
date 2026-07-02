@@ -1021,6 +1021,8 @@ class MediaAdapter(
                 playPortraitOutline?.beVisibleIf(showFileTypes)
             }
 
+            motionPhotoIcon?.beVisibleIf(medium.isMotionPhoto)
+
             if (showFileTypes && (medium.isGIF() || medium.isRaw() || medium.isSVG())) {
                 fileType?.setText(
                     when (medium.type) {
@@ -1092,6 +1094,7 @@ class MediaAdapter(
             if (isListViewType) {
                 mediumName.setTextColor(textColor)
                 playPortraitOutline?.applyColorFilter(textColor)
+                motionPhotoIcon?.applyColorFilter(textColor)
             }
         }
     }

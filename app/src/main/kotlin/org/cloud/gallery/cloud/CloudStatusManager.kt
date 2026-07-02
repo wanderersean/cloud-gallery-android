@@ -18,6 +18,7 @@ class CloudStatusManager(context: Context) {
     private val cloudFavorites = ConcurrentHashMap<String, Boolean>()
     private val pendingQueries = ConcurrentHashMap<String, Boolean>()
     private val pendingTitles = ConcurrentHashMap<String, String>()
+    private val failedQueries = ConcurrentHashMap.newKeySet<String>()
 
     private val statusListeners = CopyOnWriteArrayList<StatusCallback>()
 
@@ -62,7 +63,7 @@ class CloudStatusManager(context: Context) {
         if (!accountManager.isLoggedIn) return
 
         val normalizedPaths = paths.map { normalize(it) }
-        val pathsToQuery = normalizedPaths.filter { !uploadedPaths.containsKey(it) && !pendingQueries.containsKey(it) }
+        val pathsToQuery = normalizedPaths.filter { !uploadedPaths.containsKey(it) && !pendingQueries.containsKey(it) && !failedQueries.contains(it) }
         if (pathsToQuery.isEmpty()) return
 
         pathsToQuery.forEach { pendingQueries[it] = true }
@@ -92,8 +93,7 @@ class CloudStatusManager(context: Context) {
                                 statusListeners.forEach { it.onStatusUpdated(path, isUploaded) }
                             } else {
                                 pendingQueries.remove(path)
-                                callback.onStatusUpdated(path, null)
-                                statusListeners.forEach { it.onStatusUpdated(path, null) }
+                                failedQueries.add(path)
                             }
                         }
                     } else {
@@ -101,18 +101,16 @@ class CloudStatusManager(context: Context) {
                         Log.e("CloudStatusManager", "query failed: $errorMsg")
                         batch.forEach { path ->
                             pendingQueries.remove(path)
-                            callback.onStatusUpdated(path, null)
-                            statusListeners.forEach { it.onStatusUpdated(path, null) }
+                            failedQueries.add(path)
                         }
+                        // 查询失败时不触发 onStatusUpdated, 避免 notifyItemChanged 导致无限循环
                     }
                 }
             } catch (e: Exception) {
                 Log.e("CloudStatusManager", "query error", e)
                 pathsToQuery.forEach { pendingQueries.remove(it) }
-                pathsToQuery.forEach { path ->
-                    callback.onStatusUpdated(path, null)
-                    statusListeners.forEach { it.onStatusUpdated(path, null) }
-                }
+                pathsToQuery.forEach { failedQueries.add(it) }
+                // 异常时不触发 onStatusUpdated, 避免 notifyItemChanged 导致无限循环
             }
         }
     }
@@ -139,6 +137,7 @@ class CloudStatusManager(context: Context) {
         cloudFavorites.clear()
         pendingQueries.clear()
         pendingTitles.clear()
+        failedQueries.clear()
     }
 
     companion object {

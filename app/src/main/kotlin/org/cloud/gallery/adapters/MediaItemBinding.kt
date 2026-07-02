@@ -13,6 +13,7 @@ interface MediaItemBinding {
     val root: ViewGroup
     val mediaItemHolder: ViewGroup
     val favorite: ImageView
+    val motionPhotoIcon: ImageView?
     val playPortraitOutline: ImageView?
     val fileType: TextView?
     val mediumName: TextView
@@ -28,6 +29,7 @@ class PhotoListMediaItemBinding(val binding: PhotoItemListBinding) : MediaItemBi
     override val root: ViewGroup = binding.root
     override val mediaItemHolder: ViewGroup = binding.mediaItemHolder
     override val favorite: ImageView = binding.favorite
+    override val motionPhotoIcon: ImageView = binding.motionPhotoIcon
     override val playPortraitOutline: ImageView? = null
     override val fileType: TextView = binding.fileType
     override val mediumName: TextView = binding.mediumName
@@ -45,6 +47,7 @@ class PhotoGridMediaItemBinding(val binding: PhotoItemGridBinding) : MediaItemBi
     override val root: ViewGroup = binding.root
     override val mediaItemHolder: ViewGroup = binding.mediaItemHolder
     override val favorite: ImageView = binding.favorite
+    override val motionPhotoIcon: ImageView = binding.motionPhotoIcon
     override val playPortraitOutline: ImageView? = null
     override val fileType: TextView = binding.fileType
     override val mediumName: TextView = binding.mediumName
@@ -62,6 +65,7 @@ class VideoListMediaItemBinding(val binding: VideoItemListBinding) : MediaItemBi
     override val root: ViewGroup = binding.root
     override val mediaItemHolder: ViewGroup = binding.mediaItemHolder
     override val favorite: ImageView = binding.favorite
+    override val motionPhotoIcon: ImageView? = null
     override val playPortraitOutline: ImageView = binding.playPortraitOutline
     override val fileType: TextView? = null
     override val mediumName: TextView = binding.mediumName
@@ -79,6 +83,7 @@ class VideoGridMediaItemBinding(val binding: VideoItemGridBinding) : MediaItemBi
     override val root: ViewGroup = binding.root
     override val mediaItemHolder: ViewGroup = binding.mediaItemHolder
     override val favorite: ImageView = binding.favorite
+    override val motionPhotoIcon: ImageView? = null
     override val playPortraitOutline: ImageView = binding.playPortraitOutline
     override val fileType: TextView? = null
     override val mediumName: TextView = binding.mediumName
