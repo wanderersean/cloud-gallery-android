@@ -69,7 +69,19 @@ class CloudAccountDialog(val activity: Activity, private var configStringOverrid
         }
     }
 
+    // 默认入口是邮箱登录；「改用配置串登录」再回到下面的老流程。
     private fun showLoginDialog() {
+        CloudEmailAuthFlow(
+            activity = activity,
+            onLegacyLogin = { showLegacyLoginDialog() },
+            onFinished = {
+                dialog?.dismiss()
+                callback()
+            }
+        ).start()
+    }
+
+    private fun showLegacyLoginDialog() {
         val binding = DialogCloudAccountBinding.inflate(activity.layoutInflater)
 
         binding.cloudLoginGroup.visibility = View.VISIBLE
@@ -216,6 +228,10 @@ class CloudAccountDialog(val activity: Activity, private var configStringOverrid
 
         binding.cloudLogoutBtn.setOnClickListener {
             accountManager.logout()
+            if (CloudConfig.usesStsCredentials) {
+                // 邮箱登录没有长期密钥，退出时把服务端下发的 STS 临时凭证一起清掉
+                CloudConfig.clearConfig(activity)
+            }
             dialog?.dismiss()
             Toast.makeText(activity, R.string.cloud_logout, Toast.LENGTH_SHORT).show()
             callback()

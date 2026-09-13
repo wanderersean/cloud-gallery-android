@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/cloud_family_bind_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/cloud_family_invite_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@android:drawable/edit_text"
+            android:hint="@string/cloud_family_invite_placeholder"
+            android:inputType="textCapCharacters"
+            android:maxLength="16"
+            android:maxLines="1"
+            android:padding="12dp"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/cloud_family_join_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cloud_family_join" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/cloud_family_owner_section"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/cloud_family_ak_id_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@android:drawable/edit_text"
+            android:hint="@string/cloud_family_ak_id"
+            android:inputType="text"
+            android:maxLines="1"
+            android:padding="12dp"
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/cloud_family_ak_secret_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@android:drawable/edit_text"
+            android:hint="@string/cloud_family_ak_secret"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:padding="12dp"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/cloud_family_region_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:drawable/edit_text"
+                android:hint="@string/cloud_family_region"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="12dp"
+                android:text="cn-hangzhou"
+                android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/cloud_family_bucket_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1.4"
+                android:background="@android:drawable/edit_text"
+                android:hint="@string/cloud_family_bucket_optional"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="12dp"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/cloud_family_claim_btn"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cloud_family_claim" />
+    </LinearLayout>
+</ScrollView>
