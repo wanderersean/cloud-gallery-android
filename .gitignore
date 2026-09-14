@@ -20,3 +20,7 @@ server/main
 .env.local
 passwords.txt
 .codegraph
+
+# Python 字节码缓存（deploy/casdoor 下的运维脚本运行后会产生）
+__pycache__/
+*.py[cod]
