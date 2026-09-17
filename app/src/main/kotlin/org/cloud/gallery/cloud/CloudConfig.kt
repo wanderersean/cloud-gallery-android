@@ -6,7 +6,7 @@ import org.fossify.gallery.BuildConfig
 import org.json.JSONObject
 
 object CloudConfig {
-    // 后端服务地址由构建时注入（debug: 47.98.124.235:8080，release: 121.196.160.64:80）
+    // 后端服务地址由构建时注入（debug: http://47.98.124.235:8080，release: https://www.cloud-gallery.cn）
     // 配置串中的 server_url 字段保留解析但不再使用
     private var _serverUrl: String = BuildConfig.SERVER_BASE_URL
     private var _accessKeyId: String = ""
