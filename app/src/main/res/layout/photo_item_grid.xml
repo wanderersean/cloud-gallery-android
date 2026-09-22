@@ -101,7 +101,6 @@
                 android:visibility="gone"
                 tools:visibility="visible"
                 tools:progress="50"
-                app:indicatorColor="#4CAF50"
                 app:trackColor="@android:color/transparent"/>
         </FrameLayout>
 

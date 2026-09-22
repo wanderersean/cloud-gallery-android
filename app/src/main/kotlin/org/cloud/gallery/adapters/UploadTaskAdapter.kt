@@ -1,6 +1,5 @@
 package org.fossify.gallery.adapters
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,8 @@ import com.bumptech.glide.Glide
 import org.fossify.gallery.R
 import org.fossify.gallery.cloud.CloudUploadManager
 import org.fossify.gallery.databinding.ItemUploadTaskBinding
+import org.fossify.commons.extensions.getProperPrimaryColor
+import org.fossify.commons.extensions.getProperTextColor
 
 class UploadTaskAdapter(
     private var tasks: List<CloudUploadManager.UploadTask>,
@@ -39,28 +40,28 @@ class UploadTaskAdapter(
             when (task.status) {
                 CloudUploadManager.UploadStatus.PENDING -> {
                     taskStatus.text = context.getString(R.string.cloud_status_pending)
-                    taskStatus.setTextColor(context.getColor(android.R.color.darker_gray))
+                    taskStatus.setTextColor(context.getProperTextColor())
                     taskCancelBtn.visibility = View.VISIBLE
                 }
                 CloudUploadManager.UploadStatus.UPLOADING -> {
                     taskStatus.text = String.format(context.getString(R.string.cloud_status_uploading), task.progress)
-                    taskStatus.setTextColor(context.getColor(android.R.color.holo_blue_dark))
+                    taskStatus.setTextColor(context.getProperPrimaryColor())
                     taskCancelBtn.visibility = View.VISIBLE
                 }
                 CloudUploadManager.UploadStatus.SUCCESS -> {
                     taskStatus.text = context.getString(R.string.cloud_status_success)
-                    taskStatus.setTextColor(context.getColor(android.R.color.holo_green_dark))
+                    taskStatus.setTextColor(context.getProperPrimaryColor())
                     taskCancelBtn.visibility = View.GONE
                     taskProgress.progress = 100
                 }
                 CloudUploadManager.UploadStatus.FAILED -> {
                     taskStatus.text = "${context.getString(R.string.cloud_status_failed)}: ${task.errorMessage}"
-                    taskStatus.setTextColor(context.getColor(android.R.color.holo_red_dark))
+                    taskStatus.setTextColor(context.getProperPrimaryColor())
                     taskCancelBtn.visibility = View.GONE
                 }
                 CloudUploadManager.UploadStatus.CANCELLED -> {
                     taskStatus.text = context.getString(R.string.cloud_status_cancelled)
-                    taskStatus.setTextColor(context.getColor(android.R.color.darker_gray))
+                    taskStatus.setTextColor(context.getProperTextColor())
                     taskCancelBtn.visibility = View.GONE
                 }
             }

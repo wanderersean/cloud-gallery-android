@@ -31,6 +31,7 @@ import org.fossify.commons.extensions.formatSize
 import org.fossify.commons.extensions.getFilenameFromPath
 import org.fossify.commons.extensions.getFormattedDuration
 import org.fossify.commons.extensions.getProperBackgroundColor
+import org.fossify.commons.extensions.getProperPrimaryColor
 import org.fossify.commons.extensions.getProperTextColor
 import org.fossify.commons.extensions.getOTGPublicPath
 import org.fossify.commons.extensions.getParentPath
@@ -49,6 +50,8 @@ import org.fossify.commons.extensions.needsStupidWritePermissions
 import org.fossify.commons.extensions.recycleBinPath
 import org.fossify.commons.extensions.rescanPaths
 import org.fossify.commons.extensions.toast
+import org.fossify.commons.extensions.getAlertDialogBuilder
+import org.fossify.commons.extensions.setupDialogStuff
 import org.fossify.commons.helpers.FAVORITES
 import org.fossify.commons.helpers.VIEW_TYPE_LIST
 import org.fossify.commons.helpers.ensureBackgroundThread
@@ -148,12 +151,9 @@ class MediaAdapter(
 
             val cloudStatusManager = CloudStatusManager.getInstance(activity)
             cloudStatusManager.queryUploadStatus(pathsToQuery, object : CloudStatusManager.StatusCallback {
-                override fun onStatusUpdated(path: String, isUploaded: Boolean?) {
-                    activity.runOnUiThread {
-                        // 只刷新状态变化的 item，避免全量刷新导致的闪烁
-                        notifyItemChangedByPath(path)
-                    }
-                }
+                // Status updates are delivered through the adapter-level listener below.
+                // Do not refresh here as well, otherwise each query result rebinds the item twice.
+                override fun onStatusUpdated(path: String, isUploaded: Boolean?) = Unit
             })
         }
     }
@@ -768,7 +768,7 @@ class MediaAdapter(
             addView(editText)
         }
 
-        androidx.appcompat.app.AlertDialog.Builder(activity)
+        activity.getAlertDialogBuilder()
             .setTitle(R.string.batch_edit_cloud_title)
             .setView(container)
             .setPositiveButton(org.fossify.commons.R.string.ok) { _, _ ->
@@ -798,7 +798,9 @@ class MediaAdapter(
                 }
             }
             .setNegativeButton(org.fossify.commons.R.string.cancel, null)
-            .show()
+            .apply {
+                activity.setupDialogStuff(container, this, R.string.batch_edit_cloud_title) { }
+            }
     }
 
     private fun uploadToCloud() {
@@ -944,6 +946,7 @@ class MediaAdapter(
                     cloudContainer?.beVisible()
                     cloudIcon?.beGone()
                     uploadProgress?.beVisible()
+                    uploadProgress?.setIndicatorColor(activity.getProperPrimaryColor())
                     uploadProgress?.progress = activeTask.progress
                     uploadProgress?.setOnClickListener(null)
                     uploadProgress?.setOnLongClickListener {
@@ -969,8 +972,10 @@ class MediaAdapter(
                             val isCloudFavorite = cloudStatusManager.isFavorite(medium.path) == true
                             if (isCloudFavorite) {
                                 cloudIcon?.setImageResource(R.drawable.ic_heart_filled_green)
+                                cloudIcon?.applyColorFilter(activity.getProperPrimaryColor())
                             } else {
                                 cloudIcon?.setImageResource(R.drawable.ic_cloud_done_vector)
+                                cloudIcon?.applyColorFilter(activity.getProperPrimaryColor())
                             }
                             cloudIcon?.setOnClickListener(null)
                             
@@ -985,6 +990,7 @@ class MediaAdapter(
                             }
                         } else {
                             cloudIcon?.setImageResource(R.drawable.ic_cloud_upload_vector)
+                            cloudIcon?.applyColorFilter(activity.getProperPrimaryColor())
                             cloudIcon?.setOnClickListener {
                                 uploadSingleFile(medium.path, cloudIcon, medium)
                             }
@@ -1085,6 +1091,9 @@ class MediaAdapter(
                 roundCorners = roundedCorners,
                 signature = medium.getKey(),
                 skipMemoryCacheAtPaths = rotatedImagePaths,
+                // Grid items are rebound frequently while scrolling. A transition here
+                // makes recycled thumbnails visibly blink, even when the image is cached.
+                crossFadeDuration = 0,
                 onError = {
                     mediumThumbnail.scaleType = ImageView.ScaleType.CENTER
                     mediumThumbnail.setImageDrawable(AppCompatResources.getDrawable(activity, R.drawable.ic_vector_warning_colored))

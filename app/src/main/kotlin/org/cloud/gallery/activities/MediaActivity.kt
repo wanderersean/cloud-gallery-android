@@ -420,8 +420,6 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener, CloudAccountMan
             }
             findItem(R.id.cloud_account)?.apply {
                 setIcon(cloudIcon)
-                // 清除系统 tint，让 drawable 自带颜色生效（绿色/灰色）
-                iconTintList = null
             }
         }
     }

@@ -42,6 +42,7 @@ import com.google.android.material.appbar.AppBarLayout
 import org.fossify.commons.dialogs.PropertiesDialog
 import org.fossify.commons.dialogs.RenameItemDialog
 import org.fossify.commons.extensions.applyColorFilter
+import org.fossify.commons.extensions.getProperPrimaryColor
 import org.fossify.commons.extensions.beGone
 import org.fossify.commons.extensions.beVisible
 import org.fossify.commons.extensions.beVisibleIf
@@ -1155,6 +1156,7 @@ class ViewPagerActivity : BaseViewerActivity(), ViewPager.OnPageChangeListener, 
         if (activeTask != null) {
             binding.bottomActions.bottomCloudUpload.beGone()
             binding.bottomActions.bottomCloudUploadProgress.beVisible()
+            binding.bottomActions.bottomCloudUploadProgress.setIndicatorColor(getProperPrimaryColor())
             binding.bottomActions.bottomCloudUploadProgress.progress = activeTask.progress
             binding.bottomActions.bottomCloudUploadProgress.setOnLongClickListener {
                 val currentMedium = getCurrentMedium()
@@ -1180,8 +1182,10 @@ class ViewPagerActivity : BaseViewerActivity(), ViewPager.OnPageChangeListener, 
                     binding.bottomActions.bottomCloudUpload.setImageResource(
                         if (isCloudFavorite) R.drawable.ic_heart_filled_green else R.drawable.ic_cloud_done_vector
                     )
+                    binding.bottomActions.bottomCloudUpload.applyColorFilter(getProperPrimaryColor())
                 } else {
                     binding.bottomActions.bottomCloudUpload.setImageResource(R.drawable.ic_cloud_upload_vector)
+                    binding.bottomActions.bottomCloudUpload.applyColorFilter(getProperPrimaryColor())
                 }
             } else {
                 // 状态未知 - 不显示云端图标，表示结果未知
@@ -1199,6 +1203,7 @@ class ViewPagerActivity : BaseViewerActivity(), ViewPager.OnPageChangeListener, 
                                         binding.bottomActions.bottomCloudUpload.setImageResource(
                                             if (isCloudFavorite) R.drawable.ic_heart_filled_green else R.drawable.ic_cloud_done_vector
                                         )
+                                        binding.bottomActions.bottomCloudUpload.applyColorFilter(getProperPrimaryColor())
                                         // 上传成功后，更新标题为云端标题
                                         val cloudTitle = cloudStatusManager.getCloudTitle(path)
                                         if (cloudTitle != null) {
@@ -1206,6 +1211,7 @@ class ViewPagerActivity : BaseViewerActivity(), ViewPager.OnPageChangeListener, 
                                         }
                                     } else if (isUploaded == false) {
                                         binding.bottomActions.bottomCloudUpload.setImageResource(R.drawable.ic_cloud_upload_vector)
+                                        binding.bottomActions.bottomCloudUpload.applyColorFilter(getProperPrimaryColor())
                                     } else {
                                         // 状态未知，隐藏图标
                                         binding.bottomActions.bottomCloudUpload.beGone()
