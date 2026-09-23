@@ -14,6 +14,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.fossify.commons.extensions.getAlertDialogBuilder
+import org.fossify.commons.extensions.getProperPrimaryColor
+import org.fossify.commons.extensions.getProperTextColor
+import org.fossify.commons.extensions.getContrastColor
 import org.fossify.commons.extensions.setupDialogStuff
 import org.fossify.gallery.R
 import org.fossify.gallery.adapters.UploadTaskAdapter
@@ -83,6 +86,7 @@ class CloudAccountDialog(val activity: Activity, private var configStringOverrid
 
     private fun showLegacyLoginDialog() {
         val binding = DialogCloudAccountBinding.inflate(activity.layoutInflater)
+        applyThemeColors(binding)
 
         binding.cloudLoginGroup.visibility = View.VISIBLE
         binding.cloudLoggedInGroup.visibility = View.GONE
@@ -137,6 +141,7 @@ class CloudAccountDialog(val activity: Activity, private var configStringOverrid
 
     private fun showLoginDialogWithConfig(configString: String) {
         val binding = DialogCloudAccountBinding.inflate(activity.layoutInflater)
+        applyThemeColors(binding)
 
         binding.cloudLoginGroup.visibility = View.VISIBLE
         binding.cloudLoggedInGroup.visibility = View.GONE
@@ -204,6 +209,18 @@ class CloudAccountDialog(val activity: Activity, private var configStringOverrid
     private fun showUploadTasksDialog() {
         val binding = DialogCloudUploadTasksBinding.inflate(activity.layoutInflater)
         val uploadManager = CloudUploadManager.getInstance(activity)
+        val textColor = activity.getProperTextColor()
+        val primaryColor = activity.getProperPrimaryColor()
+        binding.cloudDisplayNameLabel.setTextColor(textColor)
+        binding.cloudDisplayName.setTextColor(textColor)
+        binding.uploadTasksTitle.setTextColor(textColor)
+        binding.uploadTasksEmpty.setTextColor(textColor)
+        binding.cloudHeaderDivider.setBackgroundColor(
+            androidx.core.graphics.ColorUtils.setAlphaComponent(textColor, 64)
+        )
+        val primaryContrastColor = primaryColor.getContrastColor()
+        binding.cloudLogoutBtn.setTextColor(primaryContrastColor)
+        binding.clearCompletedBtn.setTextColor(primaryContrastColor)
 
         binding.cloudDisplayName.text = accountManager.displayName
 
@@ -270,5 +287,21 @@ class CloudAccountDialog(val activity: Activity, private var configStringOverrid
             }
             binding.clearCompletedBtn.visibility = if (hasCompleted) View.VISIBLE else View.GONE
         }
+    }
+
+    private fun applyThemeColors(binding: DialogCloudAccountBinding) {
+        val textColor = activity.getProperTextColor()
+        val primaryColor = activity.getProperPrimaryColor()
+        binding.cloudConfigHintText.setTextColor(textColor)
+        binding.cloudDisplayNameLabel.setTextColor(textColor)
+        binding.cloudDisplayName.setTextColor(textColor)
+        binding.cloudScanQrBtn.setTextColor(primaryColor)
+        binding.cloudQrWebLoginBtn.setTextColor(primaryColor)
+        binding.cloudConfigInput.setTextColor(textColor)
+        binding.cloudConfigInput.setHintTextColor(
+            androidx.core.graphics.ColorUtils.setAlphaComponent(textColor, 160)
+        )
+        binding.cloudConfigInput.backgroundTintList =
+            android.content.res.ColorStateList.valueOf(primaryColor)
     }
 }

@@ -3,6 +3,7 @@ package org.fossify.gallery.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.content.res.ColorStateList
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.fossify.gallery.R
@@ -30,6 +31,8 @@ class UploadTaskAdapter(
         holder.binding.apply {
             taskFilename.text = task.filename
             taskProgress.progress = task.progress
+            taskProgress.progressTintList = ColorStateList.valueOf(context.getProperPrimaryColor())
+            taskCancelBtn.drawable?.mutate()?.setTint(context.getProperTextColor())
 
             Glide.with(context)
                 .load(task.path)

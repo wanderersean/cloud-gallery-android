@@ -13,6 +13,7 @@
         android:visibility="gone">
 
         <TextView
+            android:id="@+id/cloud_config_hint_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/cloud_config_hint"
@@ -28,7 +29,6 @@
             android:minLines="3"
             android:maxLines="5"
             android:padding="12dp"
-            android:background="@android:drawable/edit_text"
             android:textSize="12sp"
             android:fontFamily="monospace"
             android:layout_marginBottom="8dp" />
@@ -58,11 +58,12 @@
         android:visibility="gone">
 
         <TextView
+            android:id="@+id/cloud_display_name_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/cloud_display_name"
             android:textSize="12sp"
-            android:textColor="?android:attr/textColorSecondary" />
+            />
 
         <TextView
             android:id="@+id/cloud_display_name"
