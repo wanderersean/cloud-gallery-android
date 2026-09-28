@@ -68,6 +68,7 @@ import org.fossify.gallery.databinding.VideoItemGridBinding
 import org.fossify.gallery.databinding.VideoItemListBinding
 import org.fossify.gallery.dialogs.DeleteWithRememberDialog
 import org.fossify.gallery.extensions.config
+import org.fossify.gallery.extensions.getCloudUnuploadedIconColor
 import org.fossify.gallery.extensions.fixDateTaken
 import org.fossify.gallery.extensions.getShortcutImage
 import org.fossify.gallery.extensions.handleMediaManagementPrompt
@@ -990,7 +991,7 @@ class MediaAdapter(
                             }
                         } else {
                             cloudIcon?.setImageResource(R.drawable.ic_cloud_upload_vector)
-                            cloudIcon?.applyColorFilter(activity.getProperPrimaryColor())
+                            cloudIcon?.applyColorFilter(activity.getCloudUnuploadedIconColor())
                             cloudIcon?.setOnClickListener {
                                 uploadSingleFile(medium.path, cloudIcon, medium)
                             }

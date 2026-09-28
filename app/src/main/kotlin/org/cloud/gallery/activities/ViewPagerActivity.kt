@@ -107,6 +107,7 @@ import org.fossify.gallery.extensions.config
 import org.fossify.gallery.extensions.favoritesDB
 import org.fossify.gallery.extensions.fixDateTaken
 import org.fossify.gallery.extensions.getFavoritePaths
+import org.fossify.gallery.extensions.getCloudUnuploadedIconColor
 import org.fossify.gallery.extensions.getShortcutImage
 import org.fossify.gallery.extensions.handleMediaManagementPrompt
 import org.fossify.gallery.extensions.hideSystemUI
@@ -1185,7 +1186,7 @@ class ViewPagerActivity : BaseViewerActivity(), ViewPager.OnPageChangeListener, 
                     binding.bottomActions.bottomCloudUpload.applyColorFilter(getProperPrimaryColor())
                 } else {
                     binding.bottomActions.bottomCloudUpload.setImageResource(R.drawable.ic_cloud_upload_vector)
-                    binding.bottomActions.bottomCloudUpload.applyColorFilter(getProperPrimaryColor())
+                    binding.bottomActions.bottomCloudUpload.applyColorFilter(getCloudUnuploadedIconColor())
                 }
             } else {
                 // 状态未知 - 不显示云端图标，表示结果未知
@@ -1211,7 +1212,7 @@ class ViewPagerActivity : BaseViewerActivity(), ViewPager.OnPageChangeListener, 
                                         }
                                     } else if (isUploaded == false) {
                                         binding.bottomActions.bottomCloudUpload.setImageResource(R.drawable.ic_cloud_upload_vector)
-                                        binding.bottomActions.bottomCloudUpload.applyColorFilter(getProperPrimaryColor())
+                                        binding.bottomActions.bottomCloudUpload.applyColorFilter(getCloudUnuploadedIconColor())
                                     } else {
                                         // 状态未知，隐藏图标
                                         binding.bottomActions.bottomCloudUpload.beGone()
@@ -1246,6 +1247,7 @@ class ViewPagerActivity : BaseViewerActivity(), ViewPager.OnPageChangeListener, 
                 cloudStatusManager.markAsUploaded(path)
                 runOnUiThread {
                     binding.bottomActions.bottomCloudUpload.setImageResource(R.drawable.ic_cloud_done_vector)
+                    binding.bottomActions.bottomCloudUpload.applyColorFilter(getProperPrimaryColor())
                     toast(R.string.cloud_upload_success)
                 }
             }
