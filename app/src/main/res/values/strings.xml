@@ -380,7 +380,8 @@
     <string name="cloud_email_logging_in">登录中…</string>
     <string name="cloud_email_submitting">提交中…</string>
     <string name="cloud_email_sending_code">发送中…</string>
-    <string name="cloud_email_use_config_string">改用配置串登录</string>
+    <string name="cloud_email_forgot_password">忘记密码？</string>
+    <string name="cloud_email_forgot_password_open_failed">无法打开找回密码页面</string>
     <string name="cloud_family_bind_title">加入家庭</string>
     <string name="cloud_family_bind_hint">%1$s 还没有加入任何家庭。输入户主给的邀请码即可共享照片；如果你是户主，也可以用阿里云 AccessKey 开通一个新家庭。</string>
     <string name="cloud_family_invite_code">邀请码</string>

@@ -72,11 +72,10 @@ class CloudAccountDialog(val activity: Activity, private var configStringOverrid
         }
     }
 
-    // 默认入口是邮箱登录；「改用配置串登录」再回到下面的老流程。
+    // 普通入口使用邮箱登录；扫码传入配置串时仍兼容已有二维码登录。
     private fun showLoginDialog() {
         CloudEmailAuthFlow(
             activity = activity,
-            onLegacyLogin = { showLegacyLoginDialog() },
             onFinished = {
                 dialog?.dismiss()
                 callback()

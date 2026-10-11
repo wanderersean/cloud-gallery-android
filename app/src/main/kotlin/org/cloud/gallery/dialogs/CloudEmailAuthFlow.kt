@@ -1,6 +1,9 @@
 package org.fossify.gallery.dialogs
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.CountDownTimer
 import android.util.Log
 import android.util.Patterns
@@ -11,6 +14,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.fossify.commons.extensions.getAlertDialogBuilder
+import org.fossify.commons.extensions.getContrastColor
+import org.fossify.commons.extensions.getProperBackgroundColor
+import org.fossify.commons.extensions.getProperPrimaryColor
+import org.fossify.commons.extensions.getProperTextColor
 import org.fossify.commons.extensions.setupDialogStuff
 import org.fossify.gallery.R
 import org.fossify.gallery.cloud.CloudAccountManager
@@ -33,7 +40,6 @@ import org.fossify.gallery.databinding.DialogCloudFamilyBindBinding
  */
 class CloudEmailAuthFlow(
     private val activity: Activity,
-    private val onLegacyLogin: () -> Unit,
     private val onFinished: () -> Unit
 ) {
     private val accountManager = CloudAccountManager.getInstance(activity)
@@ -49,14 +55,41 @@ class CloudEmailAuthFlow(
     private fun showLoginDialog(prefillEmail: String) {
         dismissCurrent()
         val binding = DialogCloudEmailLoginBinding.inflate(activity.layoutInflater)
+        val textColor = activity.getProperTextColor()
+        val backgroundColor = activity.getProperBackgroundColor()
+        val primaryColor = activity.getProperPrimaryColor()
+        val hintColor = androidx.core.graphics.ColorUtils.setAlphaComponent(textColor, 160)
+
+        binding.root.setBackgroundColor(backgroundColor)
+        binding.cloudEmailHint.setTextColor(textColor)
+        binding.cloudEmailInput.apply {
+            setTextColor(textColor)
+            setHintTextColor(hintColor)
+            backgroundTintList = android.content.res.ColorStateList.valueOf(primaryColor)
+        }
+        binding.cloudPasswordInput.apply {
+            setTextColor(textColor)
+            setHintTextColor(hintColor)
+            backgroundTintList = android.content.res.ColorStateList.valueOf(primaryColor)
+        }
+        binding.cloudEmailForgotPassword.setTextColor(primaryColor)
+        binding.cloudEmailLoginBtn.backgroundTintList =
+            android.content.res.ColorStateList.valueOf(primaryColor)
+        binding.cloudEmailLoginBtn.setTextColor(primaryColor.getContrastColor())
+        binding.cloudEmailSignupBtn.setTextColor(primaryColor)
         binding.cloudEmailInput.setText(prefillEmail)
         if (prefillEmail.isNotEmpty()) {
             binding.cloudPasswordInput.requestFocus()
         }
 
-        binding.cloudEmailLegacyBtn.setOnClickListener {
-            dismissCurrent()
-            onLegacyLogin()
+        binding.cloudEmailForgotPassword.setOnClickListener {
+            try {
+                activity.startActivity(
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://auth.cloud-gallery.cn/forget"))
+                )
+            } catch (error: ActivityNotFoundException) {
+                toastText(activity.getString(R.string.cloud_email_forgot_password_open_failed))
+            }
         }
 
         binding.cloudEmailSignupBtn.setOnClickListener {
